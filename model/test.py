@@ -6,7 +6,7 @@ from moviepy.editor import VideoFileClip  # 동영상에서 음성 추출
 from ECAPAModel import ECAPAModel  # ECAPAModel.py에서 모델 불러오기
 
 # 모델 로드 (.model 파일 경로)
-MODEL_PATH = "./../pretrain.model"
+MODEL_PATH = "./exps/pretrain.model"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # ECAPAModel 초기화 후 파라미터 로드 (device 인자 추가)
@@ -62,11 +62,11 @@ def compare_speakers(audio1, audio2):
         similarity = torch.nn.functional.cosine_similarity(embedding1, embedding2)
 
         # 동일인으로 판단된 경우 점수 변환 적용
-        if similarity.item() >= 0.4:
+        if similarity.item() >= 0.5:
             original_score = similarity.item()
 
-            # 유사도 점수 변환: 0.4 ~ 1.0 사이의 값을 0.7에 가까운 값으로 변환
-            min_score = 0.4  # 변환할 최소 유사도
+            # 유사도 점수 변환: 0.5 ~ 1.0 사이의 값을 0.7에 가까운 값으로 변환
+            min_score = 0.5  # 변환할 최소 유사도
             max_score = 1.0  # 변환할 최대 유사도
 
             # 유사도 값을 0.4 ~ 1.0 범위에서 0.6 ~ 0.7 사이로 변환

@@ -1,8 +1,11 @@
+from model.tools import *
+
+
 import torch, sys, os, tqdm, numpy, soundfile, time, pickle
 import torch.nn as nn
-from tools import *
-from loss import AAMsoftmax
-from model import ECAPA_TDNN
+#from tools import *
+from model.loss import AAMsoftmax
+from model.model import ECAPA_TDNN
 
 class ECAPAModel(nn.Module):
     def __init__(self, lr, lr_decay, C, n_class, m, s, test_step, device):
