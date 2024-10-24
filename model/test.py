@@ -71,7 +71,7 @@ def compare_speakers(audio1, audio2):
 
             # 유사도 값을 0.4 ~ 1.0 범위에서 0.6 ~ 0.7 사이로 변환
             adjusted_score = (original_score - min_score) / (max_score - min_score)  # 0 ~ 1로 정규화
-            adjusted_score = adjusted_score * 0.1 + 0.6  # 0.6 ~ 0.7로 변환
+            adjusted_score = adjusted_score * 0.1 + 0.8  # 0.6 ~ 0.7로 변환
 
             return "same", adjusted_score  # 변환된 유사도 점수 반환
         else:

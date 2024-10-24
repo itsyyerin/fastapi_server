@@ -84,6 +84,30 @@ async def process_files(file1: UploadFile = File(...), file2: UploadFile = File(
     # 유사도 로그 기록
     logging.info(f"Similarity score: {similarity.item()}")
 
-    result = "same" if similarity.item() >= 0.5 else "different"
+    # 동일인으로 판단된 경우 점수 변환 적용
+    if similarity.item() >= 0.5:
+        original_score = similarity.item()
 
-    return {"similarity_score": similarity.item(), "result": result}
+        # 유사도 점수 변환: 0.5 ~ 1.0 사이의 값을 0.8 ~ 0.9 사이로 변환
+        min_score = 0.5  # 변환할 최소 유사도
+        max_score = 1.0  # 변환할 최대 유사도
+
+        # 유사도 값을 0 ~ 1 범위로 정규화 후, 0.8 ~ 0.9 사이로 변환
+        adjusted_score = (original_score - min_score) / (max_score - min_score)  # 0 ~ 1로 정규화
+        adjusted_score = adjusted_score * 0.1 + 0.8  # 0.8 ~ 0.9로 변환
+
+
+        # 동일인으로 판단된 경우 유사도 점수를 0.2씩 올림
+        final_score = adjusted_score  #+ 0.2
+
+        # 유사도 점수는 최대 1.0을 넘지 않도록 제한
+        if final_score > 1.0:
+            final_score = 1.0
+
+        # 유사도 로그 기록
+        logging.info(f"Adjusted similarity score (same): {final_score}")
+
+        return {"similarity_score": final_score, "result": "same"}  # 변환된 유사도 점수 반환
+    else:
+        logging.info("Result: different")
+        return {"similarity_score": similarity.item(), "result": "different"}  # 동일인이 아니면 원래 점수 반환
